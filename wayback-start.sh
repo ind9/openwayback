@@ -23,6 +23,6 @@ export PID_FILE="${PID_DIR}/${INSTANCE}.pid"
 export OUT_FILE="${LOG_DIR}/${INSTANCE}.out"
 export LOG_FILE="${LOG_DIR}/${INSTANCE}.log"
 
-export EXECUTABLE="$JAVA  -jar ${JAR_WAR_DIR}/jetty-runner.jar ${JAR_WAR_DIR}/openwayback-2.0.1-SNAPSHOT.war"
+export EXECUTABLE="$JAVA  -jar ${JAR_WAR_DIR}/dependency/jetty-runner.jar ${JAR_WAR_DIR}/openwayback-2.0.1-SNAPSHOT.war"
 
 nohup python "${BASE_DIR}/cannonball-cluster" "${PID_FILE}" "${LOG_FILE}" "${EXECUTABLE}" > ${OUT_FILE} 2>&1 &
