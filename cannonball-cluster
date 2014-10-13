@@ -1,0 +1,62 @@
+#!/usr/bin/env python
+
+import os
+import re
+import sys
+import subprocess
+import time
+import shlex
+
+
+error_string = "actor name \\[.*\\] is not unique"
+active_string = "Registered cluster JMX MBean"
+
+sleep_time = 315
+
+def executor(filename, cmd):
+    pid = subprocess.Popen(cmd).pid
+    pid_file = open(filename, 'w')
+    pid_file.write(str(pid))
+    pid_file.close()
+    return pid
+
+
+def tail(logfile, lines):
+    stdin, stdout = os.popen2("tail -n %s %s" % (lines, logfile))
+    stdin.close()
+
+    lines = stdout.readlines()
+    stdout.close()
+
+    return lines
+
+def monitor(pid_file, log_file, cmd, retry):
+    
+    for attempt in range(retry):
+        has_failed = False
+        pid = executor(pid_file, cmd)
+        print ("Running with PID: %s" % pid)
+
+        time.sleep(sleep_time)
+        log_output = tail(log_file, 100) 
+
+        for lin in log_output:
+            if active_string in lin:
+                sys.exit(0)
+
+        for lin in log_output:
+            if re.match("^.*%s.*$" % error_string, lin) != None:
+                print "Cluster name error exists. Killing process %s" %(pid)
+                has_failed = True
+                subprocess.Popen(["kill", "-9", str(pid)])                 
+                break
+
+        if has_failed is False:
+            sys.exit(0)
+    
+if __name__ == '__main__':
+    argv = sys.argv
+    (pid_file, log_file, cmd) = (argv[1], argv[2], argv[3])
+    print "pid_file: %s, log_file: %s" %(pid_file, log_file)
+    
+    monitor(pid_file, log_file, shlex.split(cmd), retry = 5)

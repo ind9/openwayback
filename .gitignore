@@ -30,3 +30,6 @@ target/
 
 # Locally stored Netbeans configurations
 nb-configuration.xml
+
+#Idea
+.idea/

@@ -40,15 +40,15 @@
     <property name="sourceList">
       <list>
         <bean class="org.archive.wayback.resourcestore.resourcefile.DirectoryResourceFileSource">
-          <property name="name" value="files1" />
+          <property name="name" value="files" />
           <property name="prefix" value="${wayback.archivedir.1}" />
           <property name="recurse" value="false" />
         </bean>
-        <bean class="org.archive.wayback.resourcestore.resourcefile.DirectoryResourceFileSource">
+        <!-- <bean class="org.archive.wayback.resourcestore.resourcefile.DirectoryResourceFileSource">
           <property name="name" value="files2" />
           <property name="prefix" value="${wayback.archivedir.2}" />
           <property name="recurse" value="false" />
-        </bean>
+        </bean> -->
       </list>
     </property>
   </bean>

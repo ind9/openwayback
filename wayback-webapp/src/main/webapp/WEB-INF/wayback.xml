@@ -14,10 +14,10 @@
   <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     <property name="properties">
       <value>
+        <!-- Change this according to environment -->
         wayback.basedir=/tmp/openwayback
-        
-        wayback.archivedir.1=${wayback.basedir}/files1/
-        wayback.archivedir.2=${wayback.basedir}/files2/
+
+        wayback.archivedir.1=${wayback.basedir}/files/
         
         wayback.url.scheme=http
         wayback.url.host=localhost
