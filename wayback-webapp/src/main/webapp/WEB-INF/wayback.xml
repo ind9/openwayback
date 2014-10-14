@@ -15,12 +15,12 @@
     <property name="properties">
       <value>
         <!-- Change this according to environment -->
-        wayback.basedir=/tmp/openwayback
+        wayback.basedir=/data/openwayback
 
         wayback.archivedir.1=${wayback.basedir}/files/
         
         wayback.url.scheme=http
-        wayback.url.host=localhost
+        wayback.url.host=wayback.staging.indix.tv
         wayback.url.port=8080
         wayback.url.prefix=${wayback.url.scheme}://${wayback.url.host}:${wayback.url.port}
       </value>
