@@ -1,0 +1,74 @@
+#!/usr/bin/env python
+
+import argparse
+import fnmatch
+import os
+import sys
+import subprocess
+import shlex
+import signal
+import socket
+
+def executor(filename, cmd, log_file, out_file):
+    log = open(log_file, "w")
+    out = open(out_file, "w")
+    pid = subprocess.Popen(shlex.split(cmd), stderr=log, stdout=out).pid
+    pid_file = open(filename, 'w')
+    pid_file.write(str(pid))
+    pid_file.close()
+    return pid
+
+def find_war(dir, pattern):
+  matches = []
+  for root, dirnames, filenames in os.walk(dir):
+    for filename in fnmatch.filter(filenames, pattern):
+      matches.append(os.path.join(root, filename))
+  if len(matches) == 1:
+    return matches[0]
+  else:
+    print str(len(matches)) + " war files found. Abort"
+    sys.exit(0)
+
+def start_wayback():
+  BASE_DIR = os.path.dirname(os.path.realpath(__file__))
+  JAVA_HOME = os.environ.get('JAVA_HOME')
+  if JAVA_HOME == None:
+    print "JAVA_HOME not defined. Abort."
+    sys.exit(0)
+  JAVA = os.path.join(JAVA_HOME, "bin/java")
+  JAR_WAR_LOCATION = os.path.join(BASE_DIR, 'wayback-webapp/target')
+  WAR_LOCATION = find_war(JAR_WAR_LOCATION, "openwayback*.war")
+  HOSTNAME = socket.gethostname()
+  INSTANCE = "wayback." + HOSTNAME.lower()
+  LOG_DIR = "/var/log/wayback"
+  PID_DIR = "/var/run/wayback"
+  PID_FILE = os.path.join(PID_DIR, INSTANCE+".pid")
+  LOG_FILE = os.path.join(LOG_DIR, INSTANCE+".log")
+  OUT_FILE = os.path.join(LOG_DIR, INSTANCE+".out")
+  EXECUTABLE = JAVA + " -jar " +  os.path.join(JAR_WAR_LOCATION,"dependency/jetty-runner.jar") + " " + WAR_LOCATION
+  pid = executor(PID_FILE, EXECUTABLE, LOG_FILE, OUT_FILE)
+  print "Wayback machine started with PID : " + str(pid)
+  sys.exit(0)
+
+def stop_wayback():
+  HOSTNAME = socket.gethostname()
+  INSTANCE = "wayback." + HOSTNAME.lower()
+  PID_DIR = "/var/run/wayback"
+  PID_FILE = os.path.join(PID_DIR, INSTANCE+".pid")
+  pid_file = open(PID_FILE)
+  PID = pid_file.readline()
+  os.kill(int(PID), signal.SIGKILL)
+  print "Wayback machine stopped : Killed " + PID
+  sys.exit(0)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('action', nargs='?', help='An action can be either "start" or "stop"')
+    args = parser.parse_args()
+    if args.action == 'start':
+      start_wayback()
+    elif args.action == 'stop':
+      stop_wayback()
+    else:
+      parser.print_help()
+    sys.exit(0)
