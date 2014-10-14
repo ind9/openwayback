@@ -33,4 +33,4 @@ export OUT_FILE="${LOG_DIR}/${INSTANCE}.out"
 export LOG_FILE="${LOG_DIR}/${INSTANCE}.log"
 
 export EXECUTABLE="$JAVA  -jar ${JAR_WAR_DIR}/dependency/jetty-runner.jar ${WAR_LOCATION}"
-nohup python "${BASE_DIR}/wayback-pyjob" "${PID_FILE}" "${LOG_FILE}" "${EXECUTABLE}" > ${OUT_FILE} 2>&1 &
+nohup python "${BASE_DIR}/wayback-pyjob" "${PID_FILE}" "${LOG_FILE}" "${EXECUTABLE}" > ${OUT_FILE} 2> ${LOG_FILE} &

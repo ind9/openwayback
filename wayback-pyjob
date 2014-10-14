@@ -8,7 +8,7 @@ import shlex
 
 
 def executor(filename, cmd):
-    pid = subprocess.Popen(cmd).pid
+    pid = subprocess.Popen(shlex.split(cmd)).pid
     pid_file = open(filename, 'w')
     pid_file.write(str(pid))
     pid_file.close()
@@ -19,6 +19,5 @@ if __name__ == '__main__':
     argv = sys.argv
     (pid_file, log_file, cmd) = (argv[1], argv[2], argv[3])
     print "pid_file: %s, log_file: %s" %(pid_file, log_file)
-    
     pid = executor(pid_file, cmd)
     sys.exit(0)
