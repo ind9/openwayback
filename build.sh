@@ -6,7 +6,7 @@ function find_war {
   echo ${FILE}
 }
 
-#mvn clean package
+mvn clean package
 export BASE_DIR=$(cd `dirname $0`; pwd -P)
 export TARGET_LOCATION="${BASE_DIR}/wayback-webapp/target"
 cp "${TARGET_LOCATION}/dependency/jetty-runner.jar" $TARGET_LOCATION
