@@ -44,10 +44,8 @@ def start_wayback():
     print "JAVA_HOME not defined. Abort."
     sys.exit(0)
   JAVA = os.path.join(JAVA_HOME, "bin/java")
-  TARGET_LOCATION = os.path.join(BASE_DIR, 'target')
-  WAR_LOCATION = find_war(TARGET_LOCATION, "openwayback*.war")
-  EXECUTABLE = JAVA + " -jar " +  os.path.join(TARGET_LOCATION,"jetty-runner.jar") + " " + WAR_LOCATION
-  print EXECUTABLE
+  WAR_LOCATION = find_war(BASE_DIR, "openwayback*.war")
+  EXECUTABLE = JAVA + " -jar " +  os.path.join(BASE_DIR,"jetty-runner.jar") + " " + WAR_LOCATION
   pid = executor(PID_FILE, EXECUTABLE, LOG_FILE, OUT_FILE)
   print "Wayback machine started with PID : " + str(pid)
   sys.exit(0)
