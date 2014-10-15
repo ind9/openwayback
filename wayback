@@ -36,8 +36,8 @@ def start_wayback():
     print "JAVA_HOME not defined. Abort."
     sys.exit(0)
   JAVA = os.path.join(JAVA_HOME, "bin/java")
-  JAR_WAR_LOCATION = os.path.join(BASE_DIR, 'wayback-webapp/target')
-  WAR_LOCATION = find_war(JAR_WAR_LOCATION, "openwayback*.war")
+  BUILD_LOCATION = os.path.join(BASE_DIR, 'build')
+  WAR_LOCATION = find_war(BUILD_LOCATION, "openwayback*.war")
   HOSTNAME = socket.gethostname()
   INSTANCE = "wayback." + HOSTNAME.lower()
   LOG_DIR = "/var/log/wayback"
@@ -45,7 +45,7 @@ def start_wayback():
   PID_FILE = os.path.join(PID_DIR, INSTANCE+".pid")
   LOG_FILE = os.path.join(LOG_DIR, INSTANCE+".log")
   OUT_FILE = os.path.join(LOG_DIR, INSTANCE+".out")
-  EXECUTABLE = JAVA + " -jar " +  os.path.join(JAR_WAR_LOCATION,"dependency/jetty-runner.jar") + " " + WAR_LOCATION
+  EXECUTABLE = JAVA + " -jar " +  os.path.join(BUILD_LOCATION,"jetty-runner.jar") + " " + WAR_LOCATION
   pid = executor(PID_FILE, EXECUTABLE, LOG_FILE, OUT_FILE)
   print "Wayback machine started with PID : " + str(pid)
   sys.exit(0)
@@ -57,8 +57,11 @@ def stop_wayback():
   PID_FILE = os.path.join(PID_DIR, INSTANCE+".pid")
   pid_file = open(PID_FILE)
   PID = pid_file.readline()
-  os.kill(int(PID), signal.SIGKILL)
-  print "Wayback machine stopped : Killed " + PID
+  try:
+    os.kill(int(PID), signal.SIGKILL)
+    print "Wayback machine stopped : Killed " + PID
+  except:
+    print "Wayback machine not running!"
   sys.exit(0)
 
 if __name__ == '__main__':
