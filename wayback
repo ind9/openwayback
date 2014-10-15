@@ -9,6 +9,14 @@ import shlex
 import signal
 import socket
 
+HOSTNAME = socket.gethostname()
+INSTANCE = "wayback." + HOSTNAME.lower()
+LOG_DIR = "/var/log/wayback"
+PID_DIR = "/var/run/wayback"
+PID_FILE = os.path.join(PID_DIR, INSTANCE+".pid")
+LOG_FILE = os.path.join(LOG_DIR, INSTANCE+".log")
+OUT_FILE = os.path.join(LOG_DIR, INSTANCE+".out")
+
 def executor(filename, cmd, log_file, out_file):
     log = open(log_file, "w")
     out = open(out_file, "w")
@@ -36,16 +44,10 @@ def start_wayback():
     print "JAVA_HOME not defined. Abort."
     sys.exit(0)
   JAVA = os.path.join(JAVA_HOME, "bin/java")
-  BUILD_LOCATION = os.path.join(BASE_DIR, 'build')
-  WAR_LOCATION = find_war(BUILD_LOCATION, "openwayback*.war")
-  HOSTNAME = socket.gethostname()
-  INSTANCE = "wayback." + HOSTNAME.lower()
-  LOG_DIR = "/var/log/wayback"
-  PID_DIR = "/var/run/wayback"
-  PID_FILE = os.path.join(PID_DIR, INSTANCE+".pid")
-  LOG_FILE = os.path.join(LOG_DIR, INSTANCE+".log")
-  OUT_FILE = os.path.join(LOG_DIR, INSTANCE+".out")
-  EXECUTABLE = JAVA + " -jar " +  os.path.join(BUILD_LOCATION,"jetty-runner.jar") + " " + WAR_LOCATION
+  TARGET_LOCATION = os.path.join(BASE_DIR, 'target')
+  WAR_LOCATION = find_war(TARGET_LOCATION, "openwayback*.war")
+  EXECUTABLE = JAVA + " -jar " +  os.path.join(TARGET_LOCATION,"jetty-runner.jar") + " " + WAR_LOCATION
+  print EXECUTABLE
   pid = executor(PID_FILE, EXECUTABLE, LOG_FILE, OUT_FILE)
   print "Wayback machine started with PID : " + str(pid)
   sys.exit(0)

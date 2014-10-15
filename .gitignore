@@ -33,6 +33,3 @@ nb-configuration.xml
 
 #Idea
 .idea/
-
-#Wayback Build
-build/

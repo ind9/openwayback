@@ -1,3 +1,4 @@
+#!/bin/sh
 function find_war {
   LOCATION_TO_SEARCH=$1
   PATTERN=$2
@@ -5,14 +6,9 @@ function find_war {
   echo ${FILE}
 }
 
-mvn package
+#mvn clean package
 export BASE_DIR=$(cd `dirname $0`; pwd -P)
-export BUILD_LOCATION="${BASE_DIR}/build"
 export TARGET_LOCATION="${BASE_DIR}/wayback-webapp/target"
-cp "${TARGET_LOCATION}/dependency/jetty-runner.jar" $BUILD_LOCATION
-export WAR_LOCATION=`find_war wayback-webapp/target openwayback*`
-echo $WAR_LOCATION
-cp $WAR_LOCATION $BUILD_LOCATION
-tar -cvzf "${BUILD_LOCATION}/wayback.tar.gz" "${BUILD_LOCATION}"
-#WAR_LOCATION=`find_war ${BUILD_LOCATION} openwayback*`
-#rm "${BUILD_LOCATION}/jetty-runner.jar" $WAR_LOCATION
+cp "${TARGET_LOCATION}/dependency/jetty-runner.jar" $TARGET_LOCATION
+export WAR_LOCATION=`find_war ${TARGET_LOCATION} openwayback`
+tar -C ${TARGET_LOCATION} -cvzf "${TARGET_LOCATION}/wayback.tar.gz" "`basename $WAR_LOCATION`" "jetty-runner.jar"
