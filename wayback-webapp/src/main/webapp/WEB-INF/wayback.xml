@@ -17,8 +17,6 @@
         <!-- Change this according to environment -->
         wayback.basedir=/data/openwayback
 
-        wayback.archivedir.1=${wayback.basedir}/files/
-        
         wayback.url.scheme=http
         wayback.url.host=wayback.staging.indix.tv
         wayback.url.port=8080
@@ -27,37 +25,40 @@
     </property>
   </bean>
 
-  <bean id="waybackCanonicalizer" class="org.archive.wayback.util.url.AggressiveUrlCanonicalizer" />
-
-
+  <bean id="waybackCanonicalizer" class="org.archive.wayback.util.url.KeyMakerUrlCanonicalizer">
+  <constructor-arg name="surtForm" value="true"></constructor-arg>
+  </bean>
+    <!--
+    <bean id="waybackCanonicalizer" class="org.archive.wayback.util.url.AggressiveUrlCanonicalizer" />
+-->
 <!--
 	The ResourceFileLocationDB implementation to use for mapping ARC/WARC names
 	to absolute paths/URLs via a BDBJE database.
 -->
+<!--
   <bean id="resourcefilelocationdb" class="org.archive.wayback.resourcestore.locationdb.BDBResourceFileLocationDB">
     <property name="bdbPath" value="${wayback.basedir}/file-db/db/" />
     <property name="bdbName" value="DB1" />
     <property name="logPath" value="${wayback.basedir}/file-db/db.log" />
   </bean>
+-->
+
 <!--
 	The following bean provides an alternate flat-file based LocationDB
 	implementation.
 -->
-<!--
-  <bean id="resourcefilelocationdb" class="org.archive.wayback.resourcestore.locationdb.FlatFileResourceFileLocationDB">
+    <bean id="resourcefilelocationdb" class="org.archive.wayback.resourcestore.locationdb.FlatFileResourceFileLocationDB">
     <property name="path" value="${wayback.basedir}/path-index.txt" />
-  </bean>
--->
+    </bean>
 <!--
     To enable manual management of, or remote access to the above locationDB,
     uncomment the following bean.
 -->
-<!--
+    <!--
   <bean name="8080:locationdb" class="org.archive.wayback.resourcestore.locationdb.ResourceFileLocationDBServlet">
     <property name="locationDB" ref="resourcefilelocationdb" />
   </bean>
 -->
-
 <!--
 	The FileProxyServlet uses a ResourceFileLocationDB to make all ARC/WARC 
 	files appear to reside within a single HTTP 1.1 exported directory.
@@ -76,12 +77,16 @@
 	ARC/WARC files are located, see the file BDBCollection.xml.
 -->
 
-  <import resource="BDBCollection.xml"/>
+    <import resource="CDXCollection.xml"/>
 <!--
-  <import resource="CDXCollection.xml"/>
-  <import resource="RemoteCollection.xml"/>
-  <import resource="NutchCollection.xml"/>
--->
+
+    <import resource="BDBCollection.xml"/>
+
+
+
+      <import resource="RemoteCollection.xml"/>
+      <import resource="NutchCollection.xml"/>
+    -->
 
 
 
@@ -182,19 +187,23 @@
 	<!--
     <property name="exactHostMatch" value="true" />
 	-->
-    
-    <property name="collection" ref="localbdbcollection" />
+
+
+      <property name="collection" ref="localcdxcollection" />
 <!--
-    <property name="collection" ref="localcdxcollection" />
+
+      <property name="collection" ref="localbdbcollection" />
 -->
 
     <property name="replay" ref="archivalurlreplay" />
     <property name="query">
       <bean class="org.archive.wayback.query.Renderer">
-        <property name="captureJsp" value="/WEB-INF/query/CalendarResults.jsp" />
+          <property name="captureJsp" value="/WEB-INF/query/BubbleCalendar.jsp" />
+
 <!--
         This .jsp provides a "search engine" style listing of results vertically
         <property name="captureJsp" value="/WEB-INF/query/HTMLCaptureResults.jsp" />
+        <property name="captureJsp" value="/WEB-INF/query/CalendarResults.jsp" />
 -->
       </bean>
     </property>

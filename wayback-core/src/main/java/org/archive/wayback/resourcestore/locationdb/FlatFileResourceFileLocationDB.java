@@ -32,7 +32,7 @@ public class FlatFileResourceFileLocationDB implements ResourceFileLocationDB  {
 		Logger.getLogger(FlatFileResourceFileLocationDB.class.getName());
 	private String path = null;
 	private FlatFile flatFile = null;
-	private String delimiter = "\t";
+	private String delimiter = " ";
 
         /**
          * This method currently does nothing.
