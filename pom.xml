@@ -120,23 +120,10 @@
 			<url>https://oss.sonatype.org/content/repositories/releases/</url>
 		</repository>
 
-		<repository>
-			<id>cloudera</id>
-			<name>Cloudera Hadoop</name>
-			<url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
-			<layout>default</layout>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>daily</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-				<updatePolicy>daily</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</snapshots>
-		</repository>
-
+        <repository>
+            <id>cloudera</id>
+            <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
+        </repository>
 	</repositories>
 
 	<scm>
@@ -524,13 +511,22 @@
 				<artifactId>transform</artifactId>
 				<version>3.0.2</version>
 			</dependency>
-			<dependency>
-				<artifactId>hadoop-core</artifactId>
-				<groupId>org.apache.hadoop</groupId>
-				<version>1.2.1</version>
-			</dependency>
-
-
+          <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <version>2.0.0-mr1-cdh4.2.1</version>
+          </dependency>
+          <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-common</artifactId>
+            <version>2.0.0-cdh4.2.1</version>
+            <scope>compile</scope>
+          </dependency>
+          <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-core</artifactId>
+            <version>2.0.0-mr1-cdh4.2.1</version>
+          </dependency>
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
