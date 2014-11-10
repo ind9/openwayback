@@ -11,12 +11,12 @@ CDXFILE="/data/openwayback/index.cdx"
 PATH_INDEX="/data/openwayback/path-index.txt"
 
 touch $CDXTEMPFILE
-echo " CDX N b a m s k r M S V g\n" >> $CDXTEMPFILE
-cat "$CDX_TARGET_PATH/*" >> $CDXTEMPFILE
+echo " CDX N b a m s k r M S V g" >> $CDXTEMPFILE
 
 mkdir -p $CDX_TARGET_PATH
 hadoop dfs -copyToLocal $CDX_HDFS_PATH_REGEX $CDX_TARGET_PATH
-touch tmp
+cat "$CDX_TARGET_PATH/*" >> $CDXTEMPFILE
+
 for filename in `hadoop dfs -ls $WARC_TARGET_PATH_REGEX | sed '1d;s/  */ /g' | cut -d\  -f8 | xargs -n 1 basename`; do
   echo "$filename $WARC_TARGET_PATH/$filename" >> $TEMPFILE
 done
