@@ -8,7 +8,7 @@ WARC_TARGET_PATH_REGEX="$WARC_TARGET_PATH/*.warc"
 TEMPFILE="/data/openwayback/temp.file"
 CDXTEMPFILE="/tmp/index.cdx"
 CDXFILE="/data/openwayback/index.cdx"
-PATH_INDEX="/data/openwayback/path_index.txt"
+PATH_INDEX="/data/openwayback/path-index.txt"
 
 touch $CDXTEMPFILE
 echo " CDX N b a m s k r M S V g\n" >> $CDXTEMPFILE
