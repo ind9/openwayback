@@ -1,8 +1,9 @@
 #!/bin/bash
 
-CDX_HDFS_PATH_REGEX="hdfs://cdh-hmaster.production-mr.indix.tv:54310/user/akshay/20141106_cdx/*.cdx"
+DATETIME="`date --date="yesterday" "%Y%m%d"`"
+CDX_HDFS_PATH_REGEX="hdfs://cdh-hmaster.production-mr.indix.tv:54310/user/akshay/${DATETIME}_cdx/*.cdx"
 CDX_TARGET_PATH="/data/openwayback/cdxindex"
-WARC_TARGET_PATH="hdfs://cdh-hmaster.production-mr.indix.tv:54310/user/akshay/20141106"
+WARC_TARGET_PATH="hdfs://cdh-hmaster.production-mr.indix.tv:54310/user/akshay/${DATETIME}_warc"
 WARC_TARGET_PATH_REGEX="$WARC_TARGET_PATH/*.warc"
 TEMPFILE="/data/openwayback/temp.file"
 CDXTEMPFILE="/tmp/index.cdx"
