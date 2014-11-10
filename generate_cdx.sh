@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DATETIME="`date --date="yesterday" "%Y%m%d"`"
+DATETIME="`date --date="yesterday" +"%Y%m%d"`"
 CDX_HDFS_PATH_REGEX="hdfs://cdh-hmaster.production-mr.indix.tv:54310/user/akshay/${DATETIME}_cdx/*.cdx"
 CDX_TARGET_PATH="/data/openwayback/cdxindex"
 WARC_TARGET_PATH="hdfs://cdh-hmaster.production-mr.indix.tv:54310/user/akshay/${DATETIME}_warc"
