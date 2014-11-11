@@ -1,14 +1,11 @@
 #!/bin/bash
 
 DATETIME="`date --date="yesterday" +"%Y%m%d"`"
-CDX_HDFS_PATH_REGEX="hdfs://cdh-hmaster.production-mr.indix.tv:54310/user/akshay/${DATETIME}_cdx/*.cdx"
-CDX_TARGET_PATH="/data/openwayback/cdxindex"
-WARC_TARGET_PATH="hdfs://cdh-hmaster.production-mr.indix.tv:54310/user/akshay/${DATETIME}_warc"
-WARC_TARGET_PATH_REGEX="$WARC_TARGET_PATH/*.warc"
-TEMPFILE="/data/openwayback/temp.file"
+CDX_HDFS_PATH_REGEX="${CDX_HDFS_PATH}${CDX_LOCATION}/${DATETIME}_cdx/*.cdx"
+WARC_TARGET_PATH="${WARC_HDFS_PATH}${WARC_LOCATION}/${DATETIME}_warc"
+WARC_TARGET_PATH_REGEX="${WARC_TARGET_PATH}/*.warc"
+TEMPFILE="/tmp/temp.file"
 CDXTEMPFILE="/tmp/index.cdx"
-CDXFILE="/data/openwayback/index.cdx"
-PATH_INDEX="/data/openwayback/path-index.txt"
 
 touch $CDXTEMPFILE
 echo " CDX N b a m s k r M S V g" >> $CDXTEMPFILE
