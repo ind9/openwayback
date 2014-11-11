@@ -15,12 +15,33 @@
     <property name="properties">
       <value>
         <!-- Change this according to environment -->
+
         wayback.basedir=/data/openwayback
 
         wayback.url.scheme=http
-        wayback.url.host=wayback.staging.indix.tv
+        wayback.url.host=wayback.production.indix.tv
         wayback.url.port=8080
         wayback.url.prefix=${wayback.url.scheme}://${wayback.url.host}:${wayback.url.port}
+
+          <!-- Staging
+         wayback.basedir=/data/openwayback
+
+          wayback.url.scheme=http
+          wayback.url.host=wayback.staging.indix.tv
+          wayback.url.port=8080
+          wayback.url.prefix=${wayback.url.scheme}://${wayback.url.host}:${wayback.url.port}
+          -->
+
+      <!-- Testing
+
+          wayback.basedir=/home/akshay/tmp
+
+          wayback.url.scheme=http
+          wayback.url.host=localhost
+          wayback.url.port=8080
+          wayback.url.prefix=${wayback.url.scheme}://${wayback.url.host}:${wayback.url.port}
+-->
+
       </value>
     </property>
   </bean>
