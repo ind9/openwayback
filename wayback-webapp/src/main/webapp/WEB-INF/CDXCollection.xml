@@ -56,7 +56,9 @@
           <bean class="org.archive.wayback.resourceindex.CompositeSearchResultSource">
             <property name="CDXSources">
               <list>
-                <value>${wayback.basedir}/index.cdx</value>
+                <value>${wayback.basedir}/onedayago.cdx</value>
+                <value>${wayback.basedir}/twodaysago.cdx</value>
+                <value>${wayback.basedir}/threedaysago.cdx</value>
               </list>
             </property>
           </bean>
