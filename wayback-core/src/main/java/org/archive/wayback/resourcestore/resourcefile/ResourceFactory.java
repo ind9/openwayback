@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.archive.io.ArchiveReader;
@@ -43,8 +44,8 @@ import org.archive.io.warc.WARCReaderFactory;
 import org.archive.io.warc.WARCRecord;
 import org.archive.wayback.core.Resource;
 import org.archive.wayback.exception.ResourceNotAvailableException;
+import org.archive.wayback.util.MonitoredFileSet;
 import org.archive.wayback.webapp.PerformanceLogger;
-
 /**
  * Static factory class for constructing ARC/WARC Resources from 
  * File/URL + offset.
@@ -85,16 +86,17 @@ public class ResourceFactory {
 		try {
 			if(urlOrPath.startsWith("http://")) {
 				return getResource(new URL(urlOrPath), offset);
-            } else if(urlOrPath.startsWith("hdfs://")) {           	
+            } else if(urlOrPath.startsWith("hdfs://") || urlOrPath.startsWith("s3://") || urlOrPath.startsWith("s3n://")) {
                 try {
                   return getResource(new URI(urlOrPath), offset);
-                  
+
                 } catch ( java.net.URISyntaxException use ) {
                   // Stupid Java, the URISyntaxException is not a sub-type of IOException,
                   // unlike MalformedURLException.
                   throw new IOException( use );
                 }
-			} else {
+			} else
+            {
 				// assume local path:
 				return getResource(new File(urlOrPath), offset);
 			}
@@ -118,42 +120,57 @@ public class ResourceFactory {
     //        explicit init during startup?  Or just create it each
     //        time?
     // 
-    
-    // Attempt at fix: Only initializing file system once    
-    if (hdfsSys == null)
-    {
+    if (uri.toString().startsWith("s3")) {
         Configuration conf = new Configuration();
+        Path path = new Path(uri.toString());
+        FileSystem fs = path.getFileSystem(conf);
+        FSDataInputStream is = fs.open(path);
+        is.seek(offset);
+        if (isArc(path.getName())) {
+            ArchiveReader reader = ARCReaderFactory.get(path.getName(), is, false);
+            r = ARCArchiveRecordToResource(reader.get(), reader);
+        } else if (isWarc(path.getName())) {
+            ArchiveReader reader = WARCReaderFactory.get(path.getName(), is, false);
+            r = WARCArchiveRecordToResource(reader.get(), reader);
+        } else {
+            is.close();
+            throw new ResourceNotAvailableException("Unknown extension");
+        }
 
-        // Assume that the URL is a fully-qualified HDFS url, like:
-        //   hdfs://namenode:6100/collections/foo/some.arc.gz
-        // create fs with just the default URL
-        
-        URI defaultURI = new URI(uri.getScheme() + "://" + uri.getHost() + ":"+ uri.getPort() + "/");
-        hdfsSys = FileSystem.get(defaultURI, conf);
+        return r;
+
+    } else {
+
+        // Attempt at fix: Only initializing file system once
+        if (hdfsSys == null) {
+            Configuration conf = new Configuration();
+
+            // Assume that the URL is a fully-qualified HDFS url, like:
+            //   hdfs://namenode:6100/collections/foo/some.arc.gz
+            // create fs with just the default URL
+
+            URI defaultURI = new URI(uri.getScheme() + "://" + uri.getHost() + ":" + uri.getPort() + "/");
+            hdfsSys = FileSystem.get(defaultURI, conf);
+        }
+
+        Path path = new Path(uri.getPath());
+
+        FSDataInputStream is = hdfsSys.open(path);
+        is.seek(offset);
+
+        if (isArc(path.getName())) {
+            ArchiveReader reader = ARCReaderFactory.get(path.getName(), is, false);
+            r = ARCArchiveRecordToResource(reader.get(), reader);
+        } else if (isWarc(path.getName())) {
+            ArchiveReader reader = WARCReaderFactory.get(path.getName(), is, false);
+            r = WARCArchiveRecordToResource(reader.get(), reader);
+        } else {
+            is.close();
+            throw new ResourceNotAvailableException("Unknown extension");
+        }
+
+        return r;
     }
-        
-    Path path = new Path( uri.getPath() );
-
-    FSDataInputStream is = hdfsSys.open( path );
-    is.seek( offset );
-
-    if (isArc(path.getName()))
-      {
-        ArchiveReader reader = ARCReaderFactory.get(path.getName(), is, false);
-        r = ARCArchiveRecordToResource(reader.get(), reader);
-      }
-    else if (isWarc(path.getName()))
-      {
-        ArchiveReader reader = WARCReaderFactory.get(path.getName(), is, false);
-        r = WARCArchiveRecordToResource(reader.get(), reader);
-      } 
-    else 
-      {
-    	is.close();
-        throw new ResourceNotAvailableException("Unknown extension");
-      }
-    
-    return r;
   }
 
 	public static Resource getResource(File file, long offset)
