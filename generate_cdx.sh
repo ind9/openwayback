@@ -2,7 +2,8 @@
 
 DATETIME="`date --date="yesterday" +"%Y%m%d"`"
 CDX_HDFS_PATH_REGEX="${CDX_HDFS_PATH}${CDX_LOCATION}/${DATETIME}_cdx/*.cdx"
-WARC_TARGET_PATH="${WARC_HDFS_PATH}${WARC_LOCATION}/${DATETIME}_warc"
+#WARC_TARGET_PATH="${WARC_HDFS_PATH}${WARC_LOCATION}/${DATETIME}_warc"
+WARC_TARGET_PATH="s3://indix-wayback/${DATETIME}_warc"
 WARC_TARGET_PATH_REGEX="${WARC_TARGET_PATH}/*.warc"
 NEWTMPFILE="/tmp/temp2.file"
 TEMPFILE="/tmp/temp.file"
