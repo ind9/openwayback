@@ -14,12 +14,12 @@
   <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     <property name="properties">
       <value>
-        <!-- Change this according to environment -->
-
+        <!-- Change this according to environment
+-->
         wayback.basedir=/data/openwayback
 
         wayback.url.scheme=http
-        wayback.url.host=wayback.production.indix.tv
+        wayback.url.host=wayback.staging-scp.indix.tv
         wayback.url.port=8080
         wayback.url.prefix=${wayback.url.scheme}://${wayback.url.host}:${wayback.url.port}
 
@@ -33,7 +33,6 @@
           -->
 
       <!-- Testing
-
           wayback.basedir=/home/akshay/tmp
 
           wayback.url.scheme=http
@@ -41,7 +40,6 @@
           wayback.url.port=8080
           wayback.url.prefix=${wayback.url.scheme}://${wayback.url.host}:${wayback.url.port}
 -->
-
       </value>
     </property>
   </bean>
