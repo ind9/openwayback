@@ -59,6 +59,9 @@
                 <value>${wayback.basedir}/onedayago.cdx</value>
                 <value>${wayback.basedir}/twodaysago.cdx</value>
                 <value>${wayback.basedir}/threedaysago.cdx</value>
+                <value>${wayback.basedir}/fourdaysago.cdx</value>
+                <value>${wayback.basedir}/fivedaysago.cdx</value>
+                <value>${wayback.basedir}/sixdaysago.cdx</value>
               </list>
             </property>
           </bean>
